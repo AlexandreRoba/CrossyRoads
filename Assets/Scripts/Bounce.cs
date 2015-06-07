@@ -11,7 +11,8 @@ public class Bounce : MonoBehaviour
     private Vector3 startPos;
     private Vector3 endPos;
 
-
+    private bool firstInput;
+    public bool justJump;
     // Update is called once per frame
     void Update()
     {
@@ -21,6 +22,8 @@ public class Bounce : MonoBehaviour
             {
                 lerpTime = 1;
                 currentLerpTime = 0;
+                firstInput = true;
+                justJump = true;
             }
         }
         startPos = gameObject.transform.position;
@@ -41,8 +44,19 @@ public class Bounce : MonoBehaviour
             endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
         }
 
-        currentLerpTime += Time.deltaTime * 5.5f;
-        perc = currentLerpTime / lerpTime;
-        gameObject.transform.position = Vector3.Lerp(startPos, endPos, perc);
+        if (firstInput)
+        {
+            currentLerpTime += Time.deltaTime*5f;
+            perc = currentLerpTime/lerpTime;
+            gameObject.transform.position = Vector3.Lerp(startPos, endPos, perc);
+            if (perc>0.8)
+            {
+                perc = 1;
+            }
+            if (Mathf.Round(perc)==1)
+            {
+                justJump = false;
+            }
+        }
     }
 }
